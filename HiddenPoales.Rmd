@@ -214,3 +214,73 @@ add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
 dev.off()
 ```
 
+
+
+```{r}
+#install.packages("corHMM")
+library(corHMM)
+library(phytools)
+
+load("hisse.RData")
+ls()
+traits
+tree
+
+trait4 <- cbind(traits$WCVP_name, traits$annual_perennial)
+#annual_perennial
+trait4
+trait4[,2][trait4[,2] == ""] <- NA
+trait4[,2][trait4[,2] == "1"] <- 1
+trait4[,2][trait4[,2] == "0"] <- 0
+trait4[,2][trait4[,2] == "01"] <- 1
+trait4<-trait4[!is.na(trait4[,2]),]
+tipstoremove <- setdiff(tree$tip.label,trait4[,1])
+mytree <- drop.tip(tree, tipstoremove)
+
+pp.polymorphic4<-corHMM(mytree,trait4,rate.cat=2,node.states="marginal")
+pp.polymorphic4
+pp.polymorphic4.1<-corHMM(mytree,trait4,rate.cat=1,node.states="marginal")
+pp.polymorphic4.1
+pp.polymorphic4.2<-corHMM(mytree,trait4,rate.cat=2, model = "SYM", node.states="marginal")
+pp.polymorphic4.2
+pp.polymorphic4.3<-corHMM(mytree,trait4,rate.cat=1,model = "SYM", node.states="marginal")
+pp.polymorphic4.3
+
+
+pdffn = paste0("corHMMmodel_annual_perennial.pdf")
+pdf(file=pdffn, width=8, height=8)
+plotMKmodel(pp.polymorphic4, rate.cat = 2, color = c("orange", "blue"))
+dev.off()
+
+cols <- c("white", "black", "red", "yellow")
+pdffn = paste0("polymorphicARDandR1R2rates_annual_perennial.pdf")
+pdf(file=pdffn, width=6, height=200)
+plotRECON(mytree,pp.polymorphic4$states,piecolors=cols, cex=0.2, pie.cex=0.3, show.tip.label=TRUE, title="Polymorphic ARD and R1/R2 rates")
+dev.off()
+
+trait <- trait4[,2]
+names(trait) <- trait4[,1]
+pdffn = paste0("polymorphicARDandR1R2ratesv2_annual_perennial.pdf")
+pdf(file=pdffn, width=6, height=200)
+plot(mytree,type="phylogram",cex=0.2,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic4$states,piecol=cols,cex=0.3)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+cols <- c("white", "black", "red", "yellow")
+pdffn = paste0("polymorphicARDandR1R2ratesfan_annual_perennial.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan",cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic4$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+```
