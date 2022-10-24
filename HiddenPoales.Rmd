@@ -183,14 +183,14 @@ plotMKmodel(pp.polymorphic3.2, rate.cat = 2, color = c("orange", "blue"))
 dev.off()
 
 cols <- c("white", "black", "red", "yellow")
-pdffn = paste0("polymorphicARDandR1R2rates_wind_animal.pdf")
+pdffn = paste0("polymorphicSYMandR1R2rates_wind_animal.pdf")
 pdf(file=pdffn, width=6, height=200)
 plotRECON(mytree,pp.polymorphic3.2$states,piecolors=cols, cex=0.2, pie.cex=0.3, show.tip.label=TRUE, title="Polymorphic SYM and R1/R2 rates")
 dev.off()
 
 trait <- trait3[,2]
 names(trait) <- trait3[,1]
-pdffn = paste0("polymorphicARDandR1R2ratesv2_wind_animal.pdf")
+pdffn = paste0("polymorphicSYMandR1R2ratesv2_wind_animal.pdf")
 pdf(file=pdffn, width=6, height=200)
 plot(mytree,type="phylogram",cex=0.2,font=3,lwd=0.5,label.offset = 1)
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
@@ -202,7 +202,7 @@ add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
 dev.off()
 
 cols <- c("white", "black", "red", "yellow")
-pdffn = paste0("polymorphicARDandR1R2ratesfan_wind_animal.pdf")
+pdffn = paste0("polymorphicSYMandR1R2ratesfan_wind_animal.pdf")
 pdf(file=pdffn, width=100, height=100)
 plot(mytree,type="fan",cex=1,font=3,lwd=0.5,label.offset = 1)
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
