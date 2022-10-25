@@ -356,3 +356,73 @@ add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
 dev.off()
 
 ```
+
+
+
+```{r}
+#install.packages("corHMM")
+library(corHMM)
+library(phytools)
+
+load("hisse.RData")
+ls()
+traits
+tree
+
+trait6 <- cbind(traits$WCVP_name, traits$silica)
+#silica
+trait6
+trait6[,2][trait6[,2] == ""] <- NA
+trait6[,2][trait6[,2] == "1"] <- 1
+trait6[,2][trait6[,2] == "0"] <- 0
+trait6[,2][trait6[,2] == "01"] <- 1
+trait6<-trait6[!is.na(trait6[,2]),]
+tipstoremove <- setdiff(tree$tip.label,trait6[,1])
+mytree <- drop.tip(tree, tipstoremove)
+
+pp.polymorphic6<-corHMM(mytree,trait6,rate.cat=2,node.states="marginal")
+pp.polymorphic6
+pp.polymorphic6.1<-corHMM(mytree,trait6,rate.cat=1,node.states="marginal")
+pp.polymorphic6.1
+pp.polymorphic6.2<-corHMM(mytree,trait6,rate.cat=2, model = "SYM", node.states="marginal")
+pp.polymorphic6.2
+pp.polymorphic6.3<-corHMM(mytree,trait6,rate.cat=1,model = "SYM", node.states="marginal")
+pp.polymorphic6.3
+
+pdffn = paste0("corHMMmodel_CAM.pdf")
+pdf(file=pdffn, width=8, height=8)
+plotMKmodel(pp.polymorphic5, rate.cat = 2, color = c("orange", "blue"))
+dev.off()
+
+cols <- c("white", "black", "red", "yellow")
+pdffn = paste0("polymorphicARDandR1R2rates_CAM.pdf")
+pdf(file=pdffn, width=6, height=200)
+plotRECON(mytree,pp.polymorphic5$states,piecolors=cols, cex=0.2, pie.cex=0.3, show.tip.label=TRUE, title="Polymorphic ARD and R1/R2 rates")
+dev.off()
+
+trait <- trait5[,2]
+names(trait) <- trait5[,1]
+pdffn = paste0("polymorphicARDandR1R2ratesv2_CAM.pdf")
+pdf(file=pdffn, width=6, height=200)
+plot(mytree,type="phylogram",cex=0.2,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic5$states,piecol=cols,cex=0.3)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+cols <- c("white", "black", "red", "yellow")
+pdffn = paste0("polymorphicARDandR1R2ratesfan_CAM.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan",cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic5$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+```
