@@ -391,36 +391,36 @@ pp.polymorphic6.3
 
 pdffn = paste0("corHMMmodel_CAM.pdf")
 pdf(file=pdffn, width=8, height=8)
-plotMKmodel(pp.polymorphic5, rate.cat = 2, color = c("orange", "blue"))
+plotMKmodel(pp.polymorphic6.2, rate.cat = 2, color = c("orange", "blue"))
 dev.off()
 
 cols <- c("white", "black", "red", "yellow")
-pdffn = paste0("polymorphicARDandR1R2rates_CAM.pdf")
+pdffn = paste0("polymorphicSYMandR1R2rates_CAM.pdf")
 pdf(file=pdffn, width=6, height=200)
-plotRECON(mytree,pp.polymorphic5$states,piecolors=cols, cex=0.2, pie.cex=0.3, show.tip.label=TRUE, title="Polymorphic ARD and R1/R2 rates")
+plotRECON(mytree,pp.polymorphic6.2$states,piecolors=cols, cex=0.2, pie.cex=0.3, show.tip.label=TRUE, title="Polymorphic SYM and R1/R2 rates")
 dev.off()
 
-trait <- trait5[,2]
-names(trait) <- trait5[,1]
-pdffn = paste0("polymorphicARDandR1R2ratesv2_CAM.pdf")
+trait <- trait6[,2]
+names(trait) <- trait6[,1]
+pdffn = paste0("polymorphicSYMandR1R2ratesv2_silica.pdf")
 pdf(file=pdffn, width=6, height=200)
 plot(mytree,type="phylogram",cex=0.2,font=3,lwd=0.5,label.offset = 1)
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic5$states,piecol=cols,cex=0.3)
+    pie=pp.polymorphic6.2$states,piecol=cols,cex=0.3)
 add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
 dev.off()
 
 cols <- c("white", "black", "red", "yellow")
-pdffn = paste0("polymorphicARDandR1R2ratesfan_CAM.pdf")
+pdffn = paste0("polymorphicSYMandR1R2ratesfan_silica.pdf")
 pdf(file=pdffn, width=100, height=100)
 plot(mytree,type="fan",cex=1,font=3,lwd=0.5,label.offset = 1)
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic5$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic6.2$states,piecol=cols,cex=0.1)
 add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
 dev.off()
