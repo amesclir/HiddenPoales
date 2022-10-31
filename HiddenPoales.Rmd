@@ -536,7 +536,7 @@ dev.off()
 cols <- c("white", "black", "red", "yellow")
 pdffn = paste0("polymorphicARDandR1R2rates_wet_open.pdf")
 pdf(file=pdffn, width=6, height=200)
-plotRECON(mytree,pp.polymorphic8$states,piecolors=cols, cex=0.2, pie.cex=0.3, show.tip.label=TRUE, title="Polymorphic SYM and R1/R2 rates")
+plotRECON(mytree,pp.polymorphic8$states,piecolors=cols, cex=0.2, pie.cex=0.3, show.tip.label=TRUE, title="Polymorphic ARD and R1/R2 rates")
 dev.off()
 
 trait <- trait8[,2]
@@ -630,6 +630,79 @@ tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
     pie=pp.polymorphic9.2$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+```
+
+
+
+
+```{r}
+#install.packages("corHMM")
+library(corHMM)
+library(phytools)
+
+load("hisse.RData")
+ls()
+traits
+tree
+
+trait10 <- cbind(traits$WCVP_name, traits$C4)
+#nonC3
+
+trait
+trait10[,2][trait10[,2] == ""] <- NA
+trait10[,2][trait5[,2] == 1] <- 1
+trait10[,2][trait10[,2] == "1"] <- 1
+trait10[,2][trait10[,2] == "0"] <- 0
+trait10[,2][trait10[,2] == "01"] <- 1
+trait10<-trait10[!is.na(trait10[,2]),]
+tipstoremove <- setdiff(tree$tip.label,trait10[,1])
+mytree <- drop.tip(tree, tipstoremove)
+
+pp.polymorphic10<-corHMM(mytree,trait10,rate.cat=2,node.states="marginal")
+pp.polymorphic10
+pp.polymorphic10.1<-corHMM(mytree,trait10,rate.cat=1,node.states="marginal")
+pp.polymorphic10.1
+pp.polymorphic10.2<-corHMM(mytree,trait10,rate.cat=2, model = "SYM", node.states="marginal")
+pp.polymorphic10.2
+pp.polymorphic10.3<-corHMM(mytree,trait10,rate.cat=1,model = "SYM", node.states="marginal")
+pp.polymorphic10.3
+
+pdffn = paste0("corHMMmodel_nonC3.pdf")
+pdf(file=pdffn, width=8, height=8)
+plotMKmodel(pp.polymorphic10.2, rate.cat = 2, color = c("orange", "blue"))
+dev.off()
+
+cols <- c("white", "black", "red", "yellow")
+pdffn = paste0("polymorphicSYMandR1R2rates_nonC3.pdf")
+pdf(file=pdffn, width=6, height=200)
+plotRECON(mytree,pp.polymorphic10.2$states,piecolors=cols, cex=0.2, pie.cex=0.3, show.tip.label=TRUE, title="Polymorphic SYM and R1/R2 rates")
+dev.off()
+
+trait <- trait10[,2]
+names(trait) <- trait10[,1]
+pdffn = paste0("polymorphicSYMandR1R2ratesv2_nonC3.pdf")
+pdf(file=pdffn, width=6, height=200)
+plot(mytree,type="phylogram",cex=0.2,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic10.2$states,piecol=cols,cex=0.3)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+cols <- c("white", "black", "red", "yellow")
+pdffn = paste0("polymorphicSYMandR1R2ratesfan_nonC3.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan",cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic10.2$states,piecol=cols,cex=0.1)
 add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
 dev.off()
