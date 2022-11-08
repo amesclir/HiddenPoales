@@ -65,7 +65,7 @@ dev.off()
 cols <- c("white", "black", "red", "yellow")
 pdffn = paste0("polymorphicARDandR1R2ratesfan_open_closed.pdf")
 pdf(file=pdffn, width=100, height=100)
-plot(mytree,type="fan",cex=1,font=3,lwd=0.5,label.offset = 1)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
@@ -134,7 +134,7 @@ dev.off()
 cols <- c("white", "black", "red", "yellow")
 pdffn = paste0("polymorphicARDandR1R2ratesfan_c4.pdf")
 pdf(file=pdffn, width=100, height=100)
-plot(mytree,type="fan",cex=1,font=3,lwd=0.5,label.offset = 1)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
@@ -204,7 +204,7 @@ dev.off()
 cols <- c("white", "black", "red", "yellow")
 pdffn = paste0("polymorphicSYMandR1R2ratesfan_wind_animal.pdf")
 pdf(file=pdffn, width=100, height=100)
-plot(mytree,type="fan",cex=1,font=3,lwd=0.5,label.offset = 1)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
@@ -274,7 +274,7 @@ dev.off()
 cols <- c("white", "black", "red", "yellow")
 pdffn = paste0("polymorphicARDandR1R2ratesfan_annual_perennial.pdf")
 pdf(file=pdffn, width=100, height=100)
-plot(mytree,type="fan",cex=1,font=3,lwd=0.5,label.offset = 1)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
@@ -346,7 +346,7 @@ dev.off()
 cols <- c("white", "black", "red", "yellow")
 pdffn = paste0("polymorphicARDandR1R2ratesfan_CAM.pdf")
 pdf(file=pdffn, width=100, height=100)
-plot(mytree,type="fan",cex=1,font=3,lwd=0.5,label.offset = 1)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
@@ -416,7 +416,7 @@ dev.off()
 cols <- c("white", "black", "red", "yellow")
 pdffn = paste0("polymorphicSYMandR1R2ratesfan_silica.pdf")
 pdf(file=pdffn, width=100, height=100)
-plot(mytree,type="fan",cex=1,font=3,lwd=0.5,label.offset = 1)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
@@ -485,7 +485,7 @@ dev.off()
 cols <- c("white", "black", "red", "yellow")
 pdffn = paste0("polymorphicSYMandR1R2ratesfan_wet.pdf")
 pdf(file=pdffn, width=100, height=100)
-plot(mytree,type="fan",cex=1,font=3,lwd=0.5,label.offset = 1)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
@@ -555,7 +555,7 @@ dev.off()
 cols <- c("white", "black", "red", "yellow")
 pdffn = paste0("polymorphicARDandR1R2ratesfan_wet_open.pdf")
 pdf(file=pdffn, width=100, height=100)
-plot(mytree,type="fan",cex=1,font=3,lwd=0.5,label.offset = 1)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
@@ -625,7 +625,7 @@ dev.off()
 cols <- c("white", "black", "red", "yellow")
 pdffn = paste0("polymorphicSYMandR1R2ratesfan_epiphyte.pdf")
 pdf(file=pdffn, width=100, height=100)
-plot(mytree,type="fan",cex=1,font=3,lwd=0.5,label.offset = 1)
+plot(mytree,type="fan",cex=1, show.tip.label = F,font=3,lwd=0.5,label.offset = 1)
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
@@ -698,7 +698,7 @@ dev.off()
 cols <- c("white", "black", "red", "yellow")
 pdffn = paste0("polymorphicSYMandR1R2ratesfan_nonC3.pdf")
 pdf(file=pdffn, width=100, height=100)
-plot(mytree,type="fan",cex=1,font=3,lwd=0.5,label.offset = 1)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
