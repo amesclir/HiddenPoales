@@ -74,6 +74,14 @@ add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
 dev.off()
 
+pdffn = paste0("polymorphicARDandR1R2ratesfan_open_closed.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic$states,piecol=cols,cex=0.1)
+dev.off()
 
 ```
 ```{r}
@@ -212,6 +220,16 @@ nodelabels(node=1:mytree$Nnode+Ntip(mytree),
 add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
 dev.off()
+
+pdffn = paste0("polymorphicSYMandR1R2ratesfan_wind_animal.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic3.2$states,piecol=cols,cex=0.1)
+dev.off()
+
 ```
 
 
@@ -281,6 +299,16 @@ nodelabels(node=1:mytree$Nnode+Ntip(mytree),
     pie=pp.polymorphic4$states,piecol=cols,cex=0.1)
 add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+
+pdffn = paste0("polymorphicARDandR1R2ratesfan_annual_perennial.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic4$states,piecol=cols,cex=0.1)
 dev.off()
 
 ```
@@ -494,6 +522,15 @@ add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
 dev.off()
 
+pdffn = paste0("polymorphicSYMandR1R2ratesfan_wet.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic7.2$states,piecol=cols,cex=0.1)
+dev.off()
+
 ```
 
 
@@ -705,6 +742,15 @@ nodelabels(node=1:mytree$Nnode+Ntip(mytree),
     pie=pp.polymorphic10.2$states,piecol=cols,cex=0.1)
 add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+pdffn = paste0("polymorphicSYMandR1R2ratesfan_nonC3.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic10.2$states,piecol=cols,cex=0.1)
 dev.off()
 
 ```
