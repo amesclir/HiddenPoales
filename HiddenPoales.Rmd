@@ -13,24 +13,157 @@ More complex models
 
 ```{r}
 #install.packages("corHMM")
+
 library(corHMM)
 library(phytools)
 
 load("hisse.RData")
 ls()
 traits
-tree <- read.tree(file="Poales_supertree_calibrated.nwk")
-tree
+mytree <- read.tree(file="final_tree.tree")
+mytree
 
+trait1 <- cbind(traits$WCVP_name, traits$open_closed)
+trait4 <- cbind(traits$WCVP_name, traits$annual_perennial)
 trait11 <- cbind(traits$WCVP_name, traits$C4)
-#C3C4CAM
-
-trait
+trait5 <- cbind(traits$WCVP_name, traits$CAM)
 trait11[,2][trait11[,2] == ""] <- NA
 trait11[,2][trait5[,2] == 1] <- 2
 trait11[,2][trait11[,2] == "1"] <- 1
 trait11[,2][trait11[,2] == "0"] <- 0
 trait11[,2][trait11[,2] == "01"] <- 1
+trait1[,2][trait1[,2] == ""] <- NA
+trait1[,2][trait1[,2] == "1"] <- 1
+trait1[,2][trait1[,2] == "0"] <- 0
+trait1[,2][trait1[,2] == "01"] <- 1
+trait4[,2][trait4[,2] == ""] <- NA
+trait4[,2][trait4[,2] == "1"] <- 1
+trait4[,2][trait4[,2] == "0"] <- 0
+trait4[,2][trait4[,2] == "01"] <- 1
+trait12 <- cbind(trait1, trait4,trait11)
+trait12 <- trait12[,c(1,2,4,6)]
+trait12<-trait12[!is.na(trait12[,2]),]
+trait12<-trait12[!is.na(trait12[,3]),]
+trait12<-trait12[!is.na(trait12[,4]),]
+
+tipstoremove <- setdiff(mytree$tip.label,trait12[,1])
+
+mytree <- drop.tip(mytree, tipstoremove)
+
+setdiff(trait12[,1], mytree$tip.label)
+setdiff(mytree$tip.label,trait12[,1])
+
+pp.polymorphic12a<-corHMM(mytree,trait12[,c(1,2,3)],rate.cat=2,node.states="marginal")
+pp.polymorphic12a
+pp.polymorphic12a.1<-corHMM(mytree,trait12[,c(1,2,3)],rate.cat=1,node.states="marginal")
+pp.polymorphic12a.1
+pp.polymorphic12a.2<-corHMM(mytree,trait12[,c(1,2,3)],rate.cat=2, model = "SYM", node.states="marginal")
+pp.polymorphic12a.2
+pp.polymorphic12a.3<-corHMM(mytree,trait12[,c(1,2,3)],rate.cat=1,model = "SYM", node.states="marginal")
+pp.polymorphic12a.3
+
+LegendAndRateMat <- getStateMat4Dat(trait12[,c(1,2,4)])
+LegendAndRateMat
+RateMat <- LegendAndRateMat$rate.mat
+RateMat
+RateMat[2,3] <- 0
+RateMat[3,2] <- 0
+RateMat[5,6] <- 0
+RateMat[6,5] <- 0
+RateMat[5,2] <- 5
+RateMat[1,3] <- 6
+RateMat[6,3] <- 7
+RateMat[1,4] <- 8
+RateMat[5,4] <- 9
+RateMat[6,4] <- 10
+RateMat[2,5] <- 11
+RateMat[4,5] <- 12
+RateMat[2,5] <- 11
+RateMat[4,5] <- 12
+RateMat[3,6] <- 13
+RateMat[4,6] <- 14
+RateMat
+RateClassMat <- getRateCatMat(2) #
+RateClassMat <- equateStateMatPars(RateClassMat, c(1,2))
+RateClassMat
+StateMats <- list(RateMat, RateMat)
+StateMats
+FullMat <- getFullMat(StateMats, RateClassMat)
+FullMat
+RateMatsym <- RateMat
+RateMatsym
+RateMatsym[5,4] <- 1
+RateMatsym[6,4] <- 2
+RateMatsym[4,5] <- 4
+RateMatsym[4,6] <- 6
+RateMatsym[1,4] <- 3
+RateMatsym[2,5] <- 5
+RateMatsym[3,6] <- 7
+RateMatsym
+StateMatssym <- list(RateMatsym, RateMatsym)
+StateMatssym
+FullMatsym <- getFullMat(StateMatssym, RateClassMat)
+FullMatsym
+pp.polymorphic12b<-corHMM(mytree,trait12[,c(1,2,4)],rate.cat=2,rate.mat = FullMat, node.states="marginal")
+pp.polymorphic12b
+pp.polymorphic12b.1<-corHMM(mytree,trait12[,c(1,2,4)],rate.cat=1,rate.mat = RateMat, node.states="marginal")
+pp.polymorphic12b.1
+pp.polymorphic12b.2<-corHMM(mytree,trait12[,c(1,2,4)],rate.cat=2, rate.mat = FullMatsym, node.states="marginal")
+pp.polymorphic12b.2
+pp.polymorphic12b.3<-corHMM(mytree,trait12[,c(1,2,4)],rate.cat=1,rate.mat = RateMatsym, node.states="marginal")
+pp.polymorphic12b.3
+
+pp.polymorphic12c<-corHMM(mytree,trait12[,c(1,2)],rate.cat=2,node.states="marginal")
+pp.polymorphic12c
+pp.polymorphic12c.1<-corHMM(mytree,trait12[,c(1,2)],rate.cat=1,node.states="marginal")
+pp.polymorphic12c.1
+pp.polymorphic12c.2<-corHMM(mytree,trait12[,c(1,2)],rate.cat=2, model = "SYM", node.states="marginal")
+pp.polymorphic12c.2
+pp.polymorphic12c.3<-corHMM(mytree,trait12[,c(1,2)],rate.cat=1,model = "SYM", node.states="marginal")
+pp.polymorphic12c.3
+
+pp.polymorphic12d<-corHMM(mytree,trait12[,c(1,3)],rate.cat=2,node.states="marginal")
+pp.polymorphic12d
+pp.polymorphic12d.1<-corHMM(mytree,trait12[,c(1,3)],rate.cat=1,node.states="marginal")
+pp.polymorphic12d.1
+pp.polymorphic12d.2<-corHMM(mytree,trait12[,c(1,3)],rate.cat=2, model = "SYM", node.states="marginal")
+pp.polymorphic12d.2
+pp.polymorphic12d.3<-corHMM(mytree,trait12[,c(1,3)],rate.cat=1,model = "SYM", node.states="marginal")
+pp.polymorphic12d.3
+
+LegendAndRateMat <- getStateMat4Dat(trait12[,c(1,4)])
+RateMat <- LegendAndRateMat$rate.mat
+RateMat
+RateMat[2,3] <- 0
+RateMat[3,2] <- 0
+RateMat[1,3] <- 4
+RateMat
+RateClassMat <- getRateCatMat(2) #
+RateClassMat <- equateStateMatPars(RateClassMat, c(1,2))
+RateClassMat
+StateMats <- list(RateMat, RateMat)
+StateMats
+FullMat <- getFullMat(StateMats, RateClassMat)
+FullMat
+RateMatsym <- RateMat
+RateMatsym[1,2] <- 1
+RateMatsym[1,3] <- 2
+RateMatsym
+StateMatssym <- list(RateMatsym, RateMatsym)
+StateMatssym
+FullMatsym <- getFullMat(StateMatssym, RateClassMat)
+FullMatsym
+pp.polymorphic12e<-corHMM(mytree,trait12[,c(1,4)],rate.cat=2, rate.mat = FullMat, node.states="marginal")
+pp.polymorphic12e
+pp.polymorphic12e.1<-corHMM(mytree,trait12[,c(1,4)],rate.cat=1,rate.mat = RateMat, node.states="marginal")
+pp.polymorphic12e.1
+pp.polymorphic12e.2<-corHMM(mytree,trait12[,c(1,4)],rate.cat=2, rate.mat = FullMatsym, node.states="marginal")
+pp.polymorphic12e.2
+pp.polymorphic12e.3<-corHMM(mytree,trait12[,c(1,4)],rate.cat=1, rate.mat = RateMatsym, node.states="marginal")
+pp.polymorphic12e.3
+
+#C3C4CAM
+
 trait11<-trait11[!is.na(trait11[,2]),]
 tipstoremove <- setdiff(tree$tip.label,trait11[,1])
 mytree <- drop.tip(tree, tipstoremove)
@@ -43,6 +176,15 @@ pp.polymorphic11.2<-corHMM(mytree,trait11,rate.cat=2, model = "SYM", node.states
 pp.polymorphic11.2
 pp.polymorphic11.3<-corHMM(mytree,trait11,rate.cat=1,model = "SYM", node.states="marginal")
 pp.polymorphic11.3
+
+
+
+
+
+
+
+
+
 
 pdffn = paste0("corHMMmodel_C3C4CAM.pdf")
 pdf(file=pdffn, width=8, height=8)
@@ -90,6 +232,14 @@ nodelabels(node=1:mytree$Nnode+Ntip(mytree),
 dev.off()
 
 ```
+
+
+
+
+
+
+Old analyses
+
 
 
 ```{r}
@@ -175,7 +325,89 @@ dev.off()
 ```
 
 
-Old analyses
+```{r}
+#install.packages("corHMM")
+library(corHMM)
+library(phytools)
+
+load("hisse.RData")
+ls()
+traits
+tree <- read.tree(file="Poales_supertree_calibrated.nwk")
+tree
+
+trait4 <- cbind(traits$WCVP_name, traits$annual_perennial)
+#annual_perennial
+trait4
+trait4[,2][trait4[,2] == ""] <- NA
+trait4[,2][trait4[,2] == "1"] <- 1
+trait4[,2][trait4[,2] == "0"] <- 0
+trait4[,2][trait4[,2] == "01"] <- 1
+trait4<-trait4[!is.na(trait4[,2]),]
+tipstoremove <- setdiff(tree$tip.label,trait4[,1])
+mytree <- drop.tip(tree, tipstoremove)
+
+pp.polymorphic4<-corHMM(mytree,trait4,rate.cat=2,node.states="marginal")
+pp.polymorphic4
+pp.polymorphic4.1<-corHMM(mytree,trait4,rate.cat=1,node.states="marginal")
+pp.polymorphic4.1
+pp.polymorphic4.2<-corHMM(mytree,trait4,rate.cat=2, model = "SYM", node.states="marginal")
+pp.polymorphic4.2
+pp.polymorphic4.3<-corHMM(mytree,trait4,rate.cat=1,model = "SYM", node.states="marginal")
+pp.polymorphic4.3
+
+
+pdffn = paste0("corHMMmodel_annual_perennial.pdf")
+pdf(file=pdffn, width=8, height=8)
+plotMKmodel(pp.polymorphic4, rate.cat = 2, color = c("orange", "blue"))
+dev.off()
+
+cols <- c("white", "black", "red", "yellow")
+pdffn = paste0("polymorphicARDandR1R2rates_annual_perennial.pdf")
+pdf(file=pdffn, width=6, height=200)
+plotRECON(mytree,pp.polymorphic4$states,piecolors=cols, cex=0.2, pie.cex=0.3, show.tip.label=TRUE, title="Polymorphic ARD and R1/R2 rates")
+dev.off()
+
+trait <- trait4[,2]
+names(trait) <- trait4[,1]
+pdffn = paste0("polymorphicARDandR1R2ratesv2_annual_perennial.pdf")
+pdf(file=pdffn, width=6, height=200)
+plot(mytree,type="phylogram",cex=0.2,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic4$states,piecol=cols,cex=0.3)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+cols <- c("white", "black", "red", "yellow")
+pdffn = paste0("polymorphicARDandR1R2ratesfan_annual_perennial.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic4$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+
+pdffn = paste0("polymorphicARDandR1R2ratesfan_annual_perennial.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic4$states,piecol=cols,cex=0.1)
+dev.off()
+
+```
+
+
+
+
 ```{r}
 #install.packages("corHMM")
 library(corHMM)
@@ -324,86 +556,6 @@ dev.off()
 
 ```
 
-
-
-```{r}
-#install.packages("corHMM")
-library(corHMM)
-library(phytools)
-
-load("hisse.RData")
-ls()
-traits
-tree
-
-trait4 <- cbind(traits$WCVP_name, traits$annual_perennial)
-#annual_perennial
-trait4
-trait4[,2][trait4[,2] == ""] <- NA
-trait4[,2][trait4[,2] == "1"] <- 1
-trait4[,2][trait4[,2] == "0"] <- 0
-trait4[,2][trait4[,2] == "01"] <- 1
-trait4<-trait4[!is.na(trait4[,2]),]
-tipstoremove <- setdiff(tree$tip.label,trait4[,1])
-mytree <- drop.tip(tree, tipstoremove)
-
-pp.polymorphic4<-corHMM(mytree,trait4,rate.cat=2,node.states="marginal")
-pp.polymorphic4
-pp.polymorphic4.1<-corHMM(mytree,trait4,rate.cat=1,node.states="marginal")
-pp.polymorphic4.1
-pp.polymorphic4.2<-corHMM(mytree,trait4,rate.cat=2, model = "SYM", node.states="marginal")
-pp.polymorphic4.2
-pp.polymorphic4.3<-corHMM(mytree,trait4,rate.cat=1,model = "SYM", node.states="marginal")
-pp.polymorphic4.3
-
-
-pdffn = paste0("corHMMmodel_annual_perennial.pdf")
-pdf(file=pdffn, width=8, height=8)
-plotMKmodel(pp.polymorphic4, rate.cat = 2, color = c("orange", "blue"))
-dev.off()
-
-cols <- c("white", "black", "red", "yellow")
-pdffn = paste0("polymorphicARDandR1R2rates_annual_perennial.pdf")
-pdf(file=pdffn, width=6, height=200)
-plotRECON(mytree,pp.polymorphic4$states,piecolors=cols, cex=0.2, pie.cex=0.3, show.tip.label=TRUE, title="Polymorphic ARD and R1/R2 rates")
-dev.off()
-
-trait <- trait4[,2]
-names(trait) <- trait4[,1]
-pdffn = paste0("polymorphicARDandR1R2ratesv2_annual_perennial.pdf")
-pdf(file=pdffn, width=6, height=200)
-plot(mytree,type="phylogram",cex=0.2,font=3,lwd=0.5,label.offset = 1)
-tiplabels(pie=to.matrix(trait[mytree$tip.label],
-    levels(as.factor(trait))),piecol=cols,cex=0.1)
-nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic4$states,piecol=cols,cex=0.3)
-add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
-    y=0.8*par()$usr[3],fsize=2)
-dev.off()
-
-cols <- c("white", "black", "red", "yellow")
-pdffn = paste0("polymorphicARDandR1R2ratesfan_annual_perennial.pdf")
-pdf(file=pdffn, width=100, height=100)
-plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
-tiplabels(pie=to.matrix(trait[mytree$tip.label],
-    levels(as.factor(trait))),piecol=cols,cex=0.1)
-nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic4$states,piecol=cols,cex=0.1)
-add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
-    y=0.8*par()$usr[3],fsize=2)
-dev.off()
-
-
-pdffn = paste0("polymorphicARDandR1R2ratesfan_annual_perennial.jpg")
-jpeg(file=pdffn, width=3500, height=3500)
-plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
-tiplabels(pie=to.matrix(trait[mytree$tip.label],
-    levels(as.factor(trait))),piecol=cols,cex=0.1)
-nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic4$states,piecol=cols,cex=0.1)
-dev.off()
-
-```
 
 
 
