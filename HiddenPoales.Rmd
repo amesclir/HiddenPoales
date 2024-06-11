@@ -9,7 +9,7 @@ editor_options:
 
 
 
-More complex models
+More complex models with openclosed, annualperennial and photosynthesis
 
 ```{r}
 #install.packages("corHMM")
@@ -673,6 +673,612 @@ nodelabels(node=1:mytree$Nnode+Ntip(mytree),
 dev.off()
 ```
 
+
+
+More complex models with openclosed,  pollination (wind/animal), wetness (wet/dry), growth (epiphyte/not) and silica (+/-)
+
+```{r}
+#install.packages("corHMM")
+
+library(corHMM)
+library(phytools)
+
+load("hisse.RData")
+ls()
+traits
+mytree <- read.tree(file="final_tree.tree")
+mytree
+
+trait1 <- cbind(traits$WCVP_name, traits$open_closed)
+trait5 <- cbind(traits$WCVP_name, traits$wind_animal)
+trait6 <- cbind(traits$WCVP_name, traits$silica)
+trait7 <- cbind(traits$WCVP_name, traits$wet)
+trait9 <- cbind(traits$WCVP_name, traits$epiphyte)
+
+trait1[,2][trait1[,2] == ""] <- NA
+trait1[,2][trait1[,2] == "1"] <- 1
+trait1[,2][trait1[,2] == "0"] <- 0
+trait1[,2][trait1[,2] == "01"] <- 1
+trait5[,2][trait5[,2] == ""] <- NA
+trait5[,2][trait5[,2] == "1"] <- 1
+trait5[,2][trait5[,2] == "0"] <- 0
+trait5[,2][trait5[,2] == "01"] <- 1
+trait6[,2][trait6[,2] == ""] <- NA
+trait6[,2][trait6[,2] == "1"] <- 1
+trait6[,2][trait6[,2] == "0"] <- 0
+trait6[,2][trait6[,2] == "01"] <- 1
+trait7[,2][trait7[,2] == ""] <- NA
+trait7[,2][trait7[,2] == "1"] <- 1
+trait7[,2][trait7[,2] == "0"] <- 0
+trait7[,2][trait7[,2] == "01"] <- 1
+trait9[,2][trait9[,2] == ""] <- NA
+trait9[,2][trait9[,2] == "1"] <- 1
+trait9[,2][trait9[,2] == "0"] <- 0
+trait9[,2][trait9[,2] == "01"] <- 1
+
+trait13 <- cbind(trait1, trait5,trait6,trait7,trait9)
+trait13 <- trait13[,c(1,2,4,6,8,10)]
+trait13<-trait13[!is.na(trait13[,2]),]
+trait13<-trait13[!is.na(trait13[,3]),]
+trait13<-trait13[!is.na(trait13[,4]),]
+trait13<-trait13[!is.na(trait13[,5]),]
+trait13<-trait13[!is.na(trait13[,6]),]
+
+tipstoremove <- setdiff(mytree$tip.label,trait13[,1])
+
+mytree <- drop.tip(mytree, tipstoremove)
+
+setdiff(trait13[,1], mytree$tip.label)
+setdiff(mytree$tip.label,trait13[,1])
+
+pp.polymorphic13a<-corHMM(mytree,trait13[,c(1,2,3)],rate.cat=2,node.states="marginal")
+pp.polymorphic13a
+pp.polymorphic13a.1<-corHMM(mytree,trait13[,c(1,2,3)],rate.cat=1,node.states="marginal")
+pp.polymorphic13a.1
+pp.polymorphic13a.2<-corHMM(mytree,trait13[,c(1,2,3)],rate.cat=2, model = "SYM", node.states="marginal")
+pp.polymorphic13a.2
+pp.polymorphic13a.3<-corHMM(mytree,trait13[,c(1,2,3)],rate.cat=1,model = "SYM", node.states="marginal")
+pp.polymorphic13a.3
+
+pp.polymorphic13b<-corHMM(mytree,trait13[,c(1,2,4)],rate.cat=2,node.states="marginal")
+pp.polymorphic13b
+pp.polymorphic13b.1<-corHMM(mytree,trait13[,c(1,2,4)],rate.cat=1,node.states="marginal")
+pp.polymorphic13b.1
+pp.polymorphic13b.2<-corHMM(mytree,trait13[,c(1,2,4)],rate.cat=2, model = "SYM", node.states="marginal")
+pp.polymorphic13b.2
+pp.polymorphic13b.3<-corHMM(mytree,trait13[,c(1,2,4)],rate.cat=1,model = "SYM", node.states="marginal")
+pp.polymorphic13b.3
+
+#hasta aquí
+pp.polymorphic13c<-corHMM(mytree,trait13[,c(1,2,5)],rate.cat=2,node.states="marginal")
+pp.polymorphic13c
+pp.polymorphic13c.1<-corHMM(mytree,trait13[,c(1,2,5)],rate.cat=1,node.states="marginal")
+pp.polymorphic13c.1
+pp.polymorphic13c.2<-corHMM(mytree,trait13[,c(1,2,5)],rate.cat=2, model = "SYM", node.states="marginal")
+pp.polymorphic13c.2
+pp.polymorphic13c.3<-corHMM(mytree,trait13[,c(1,2,5)],rate.cat=1,model = "SYM", node.states="marginal")
+pp.polymorphic13c.3
+
+pp.polymorphic13d<-corHMM(mytree,trait13[,c(1,2,6)],rate.cat=2,node.states="marginal")
+pp.polymorphic13d
+pp.polymorphic13d.1<-corHMM(mytree,trait13[,c(1,2,6)],rate.cat=1,node.states="marginal")
+pp.polymorphic13d.1
+pp.polymorphic13d.2<-corHMM(mytree,trait13[,c(1,2,6)],rate.cat=2, model = "SYM", node.states="marginal")
+pp.polymorphic13d.2
+pp.polymorphic13d.3<-corHMM(mytree,trait13[,c(1,2,6)],rate.cat=1,model = "SYM", node.states="marginal")
+pp.polymorphic13d.3
+
+
+
+
+#open_close_wind_animal
+pdffn = paste0("corHMMmodel_open_close_wind_animal.pdf")
+pdf(file=pdffn, width=8, height=8)
+plotMKmodel(pp.polymorphic13a, rate.cat = 2, color = "col.blind" )
+dev.off()
+
+#"0_0" "0_1" "1_0" "1_1" 
+cols <- c("white", "black", "blue", "purple", "red", "yellow", "orange", "green")
+pdffn = paste0("polymorphicARDandR1R2rates_open_close_wind_animal.pdf")
+pdf(file=pdffn, width=6, height=200)
+plotRECON(mytree,pp.polymorphic13a$states,piecolors=cols, cex=0.2, pie.cex=0.3, show.tip.label=TRUE, title="Open Close Wind Animal ARD and R1/R2 rates")
+dev.off()
+
+trait <- paste(trait13[,2],trait13[,3], sep = "_") 
+names(trait) <- trait13[,1]
+pdffn = paste0("polymorphicARDandR1R2ratesv2_open_close_wind_animal.pdf")
+pdf(file=pdffn, width=6, height=200)
+plot(mytree,type="phylogram",cex=0.2,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic13a$states,piecol=cols,cex=0.3)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+cols <- c("white", "black", "blue", "purple", "red", "yellow", "orange", "green")
+pdffn = paste0("polymorphicARDandR1R2ratesfan_open_close_wind_animal.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic13a$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+pdffn = paste0("polymorphicARDandR1R2ratesfan_open_close_wind_animal.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic13a$states,piecol=cols,cex=0.1)
+dev.off()
+
+#1     2     3     4 
+#"0_0" "0_1" "1_0" "1_1" 
+#(1,R1)      (2,R1)      (3,R1)       (4,R1)      (1,R2)      (2,R2)      (3,R2)  (4,R2)
+
+cols <- c("orange", "orange", "orange", "orange", "grey", "grey", "grey", "grey")
+pdffn = paste0("polymorphicARDandR1R2ratesfan_open_close_wind_animalrates.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic13a$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+pdffn = paste0("polymorphicARDandR1R2ratesfan_open_close_wind_animalrates.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic13a$states,piecol=cols,cex=0.1)
+dev.off()
+
+cols <- c("pink", "pink", "brown", "brown", "pink", "pink", "brown", "brown")
+pdffn = paste0("polymorphicARDandR1R2ratesfan_open_close_wind_animalhabitat.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic13a$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+pdffn = paste0("polymorphicARDandR1R2ratesfan_open_close_wind_animalhabitat.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic13a$states,piecol=cols,cex=0.1)
+dev.off()
+
+
+cols <- c("green", "blue", "green", "blue", "green", "blue","green", "blue")
+pdffn = paste0("polymorphicARDandR1R2ratesfan_open_close_wind_animalpollination.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic13a$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+pdffn = paste0("polymorphicARDandR1R2ratesfan_open_close_wind_animalpollination.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic13a$states,piecol=cols,cex=0.1)
+dev.off()
+
+#open_close_wet_dry
+pdffn = paste0("corHMMmodel_open_close_wet_dry.pdf")
+pdf(file=pdffn, width=8, height=8)
+plotMKmodel(pp.polymorphic13b.2, rate.cat = 2, color = "col.blind" )
+dev.off()
+
+#"0_0" "0_1" "1_0" "1_1" 
+cols <- c("white", "black", "blue", "purple", "red", "yellow", "orange", "green")
+pdffn = paste0("polymorphicSYMandR1R2rates_open_close_wet_dry.pdf")
+pdf(file=pdffn, width=6, height=200)
+plotRECON(mytree,pp.polymorphic13b.2$states,piecolors=cols, cex=0.2, pie.cex=0.3, show.tip.label=TRUE, title="Open Close Wet Dry SYM and R1/R2 rates")
+dev.off()
+
+trait <- paste(trait13[,2],trait13[,4], sep = "_") 
+names(trait) <- trait13[,1]
+pdffn = paste0("polymorphicSYMandR1R2ratesv2_open_close_wet_dry.pdf")
+pdf(file=pdffn, width=6, height=200)
+plot(mytree,type="phylogram",cex=0.2,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic13b.2$states,piecol=cols,cex=0.3)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+cols <- c("white", "black", "blue", "purple", "red", "yellow", "orange", "green")
+pdffn = paste0("polymorphicSYMandR1R2ratesfan_open_close_wet_dry.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic13b.2$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+pdffn = paste0("polymorphicSYMandR1R2ratesfan_open_close_wet_dry.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic13b.2$states,piecol=cols,cex=0.1)
+dev.off()
+
+#1     2     3     4 
+#"0_0" "0_1" "1_0" "1_1" 
+#(1,R1)      (2,R1)      (3,R1)       (4,R1)      (1,R2)      (2,R2)      (3,R2)  (4,R2)
+
+cols <- c("orange", "orange", "orange", "orange", "grey", "grey", "grey", "grey")
+pdffn = paste0("polymorphicSYMandR1R2ratesfan_open_close_wet_dryrates.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic13b.2$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+pdffn = paste0("polymorphicSYMandR1R2ratesfan_open_close_wet_dryrates.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic13b.2$states,piecol=cols,cex=0.1)
+dev.off()
+
+cols <- c("pink", "pink", "brown", "brown", "pink", "pink", "brown", "brown")
+pdffn = paste0("polymorphicSYMandR1R2ratesfan_open_close_wet_dryhabitat.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic13b.2$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+pdffn = paste0("polymorphicSYMandR1R2ratesfan_open_close_wet_dryhabitat.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic13b.2$states,piecol=cols,cex=0.1)
+dev.off()
+
+
+cols <- c("green", "blue", "green", "blue", "green", "blue","green", "blue")
+pdffn = paste0("polymorphicSYMandR1R2ratesfan_open_close_wet_drywetness.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic13b.2$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+pdffn = paste0("polymorphicSYMandR1R2ratesfan_open_close_wet_drywetness.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic13b.2$states,piecol=cols,cex=0.1)
+dev.off()
+
+#open_close
+
+pdffn = paste0("corHMMmodel_open_closed.pdf")
+pdf(file=pdffn, width=8, height=8)
+plotMKmodel(pp.polymorphic12c, rate.cat = 2, color = "col.blind")
+dev.off()
+
+cols <- c("red", "yellow","white", "black")
+pdffn = paste0("polymorphicARDandR1R2rates_open_closed.pdf")
+pdf(file=pdffn, width=6, height=200)
+plotRECON(mytree,pp.polymorphic12c$states,piecolors=cols, cex=0.2, pie.cex=0.3, show.tip.label=TRUE, title="Open Close ARD and R1/R2 rates")
+dev.off()
+
+trait <- trait12[,2]
+names(trait) <- trait12[,1]
+pdffn = paste0("polymorphicARDandR1R2ratesv2_open_closed.pdf")
+pdf(file=pdffn, width=6, height=200)
+plot(mytree,type="phylogram",cex=0.2,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12c$states,piecol=cols,cex=0.3)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+cols <- c("red", "yellow","white", "black")
+pdffn = paste0("polymorphicARDandR1R2ratesfan_open_closed.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12c$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+pdffn = paste0("polymorphicARDandR1R2ratesfan_open_closed.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12c$states,piecol=cols,cex=0.1)
+dev.off()
+
+
+# 1   2 
+#"0" "1" 
+# (1,R1)      (2,R1)     (1,R2)      (2,R2)
+cols <- c("orange", "orange", "grey", "grey")
+pdffn = paste0("polymorphicARDandR1R2ratesfan_open_closerates.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12c$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+pdffn = paste0("polymorphicARDandR1R2ratesfan_open_closerates.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12c$states,piecol=cols,cex=0.1)
+dev.off()
+
+cols <- c("pink", "brown", "pink", "brown")
+pdffn = paste0("polymorphicARDandR1R2ratesfan_open_closehabitat.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12c$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+pdffn = paste0("polymorphicARDandR1R2ratesfan_open_closehabitat.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12c$states,piecol=cols,cex=0.1)
+dev.off()
+
+#annual_perennial
+pdffn = paste0("corHMMmodel_annual_perennial.pdf")
+pdf(file=pdffn, width=8, height=8)
+plotMKmodel(pp.polymorphic12d, rate.cat = 2, color = "col.blind")
+dev.off()
+
+cols <- c("red", "yellow","white", "black")
+pdffn = paste0("polymorphicARDandR1R2rates_annual_perennial.pdf")
+pdf(file=pdffn, width=6, height=200)
+plotRECON(mytree,pp.polymorphic12d$states,piecolors=cols, cex=0.2, pie.cex=0.3, show.tip.label=TRUE, title="Annual Perennial ARD and R1/R2 rates")
+dev.off()
+
+trait <- trait12[,3]
+names(trait) <- trait12[,1]
+pdffn = paste0("polymorphicARDandR1R2ratesv2_annual_perennial.pdf")
+pdf(file=pdffn, width=6, height=200)
+plot(mytree,type="phylogram",cex=0.2,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12d$states,piecol=cols,cex=0.3)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+cols <- c("red", "yellow","white", "black")
+pdffn = paste0("polymorphicARDandR1R2ratesfan_annual_perennial.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12d$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+
+pdffn = paste0("polymorphicARDandR1R2ratesfan_annual_perennial.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12d$states,piecol=cols,cex=0.1)
+dev.off()
+
+
+cols <- c("orange", "orange", "grey", "grey")
+pdffn = paste0("polymorphicARDandR1R2ratesfan_annual_perennialrates.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12d$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+
+pdffn = paste0("polymorphicARDandR1R2ratesfan_annual_perennialrates.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12d$states,piecol=cols,cex=0.1)
+dev.off()
+
+cols <- c("green", "blue", "green", "blue")
+pdffn = paste0("polymorphicARDandR1R2ratesfan_annual_perennialhabit.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12d$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+
+pdffn = paste0("polymorphicARDandR1R2ratesfan_annual_perennialhabit.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F, cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12d$states,piecol=cols,cex=0.1)
+dev.off()
+
+#photosynthesis
+
+pdffn = paste0("corHMMmodel_C3C4CAM.pdf")
+pdf(file=pdffn, width=8, height=8)
+plotMKmodel(pp.polymorphic12e, rate.cat = 2, color = "col.blind" )
+dev.off()
+
+cols <- c("white", "black", "blue", "red", "yellow", "orange")
+pdffn = paste0("polymorphicARDandR1R2rates_C3C4CAM.pdf")
+pdf(file=pdffn, width=6, height=200)
+plotRECON(mytree,pp.polymorphic12e$states,piecolors=cols, cex=0.2, pie.cex=0.3, show.tip.label=TRUE, title="C3C4CAM ARD and R1/R2 rates")
+dev.off()
+
+trait <- trait12[,4]
+names(trait) <- trait12[,1]
+pdffn = paste0("polymorphicARDandR1R2ratesv2_C3C4CAM.pdf")
+pdf(file=pdffn, width=6, height=200)
+plot(mytree,type="phylogram",cex=0.2,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12e$states,piecol=cols,cex=0.3)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+cols <- c("white", "black", "blue", "red", "yellow", "orange")
+pdffn = paste0("polymorphicARDandR1R2ratesfan_C3C4CAM.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12e$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+pdffn = paste0("polymorphicARDandR1R2ratesfan_C3C4CAM.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12e$states,piecol=cols,cex=0.1)
+dev.off()
+
+# 1   2   3 
+#"0" "1" "2" 
+# (1,R1)      (2,R1)       (3,R1)      (1,R2)      (2,R2)      (3,R2)
+
+cols <- c("orange", "orange", "orange", "grey", "grey", "grey")
+pdffn = paste0("polymorphicARDandR1R2ratesfan_C3C4CAMrates.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12e$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+pdffn = paste0("polymorphicARDandR1R2ratesfan_C3C4CAMrates.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12e$states,piecol=cols,cex=0.1)
+dev.off()
+
+cols <- c("green", "blue", "red", "green", "blue", "red")
+pdffn = paste0("polymorphicARDandR1R2ratesfan_C3C4CAMphoto.pdf")
+pdf(file=pdffn, width=100, height=100)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12e$states,piecol=cols,cex=0.1)
+add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
+    y=0.8*par()$usr[3],fsize=2)
+dev.off()
+
+pdffn = paste0("polymorphicARDandR1R2ratesfan_C3C4CAMphoto.jpg")
+jpeg(file=pdffn, width=3500, height=3500)
+plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1)
+tiplabels(pie=to.matrix(trait[mytree$tip.label],
+    levels(as.factor(trait))),piecol=cols,cex=0.1)
+nodelabels(node=1:mytree$Nnode+Ntip(mytree),
+    pie=pp.polymorphic12e$states,piecol=cols,cex=0.1)
+dev.off()
+```
 
 
 
@@ -1366,6 +1972,7 @@ nodelabels(node=1:mytree$Nnode+Ntip(mytree),
 dev.off()
 
 ```
+
 
 
 
