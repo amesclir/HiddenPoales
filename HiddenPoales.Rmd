@@ -62,6 +62,9 @@ pp.polymorphic12a.2
 pp.polymorphic12a.3<-corHMM(mytree,trait12[,c(1,2,3)],rate.cat=1,model = "SYM", node.states="marginal")
 pp.polymorphic12a.3
 
+pp.polymorphic12a.4<-corHMM(mytree,trait12[,c(1,2,3)],rate.cat=3, node.states="marginal")
+pp.polymorphic12a.4
+
 LegendAndRateMat <- getStateMat4Dat(trait12[,c(1,2,4)])
 LegendAndRateMat
 RateMat <- LegendAndRateMat$rate.mat
@@ -675,7 +678,7 @@ dev.off()
 
 
 
-More complex models with openclosed,  pollination (wind/animal), wetness (wet/dry), growth (epiphyte/not) and silica (+/-)
+More complex models with openclose,  pollination (wind/animal), wetness (wet/dry), growth (epiphyte/not) and silica (+/-)
 
 ```{r}
 #install.packages("corHMM")
@@ -739,6 +742,10 @@ pp.polymorphic13a.2<-corHMM(mytree,trait13[,c(1,2,3)],rate.cat=2, model = "SYM",
 pp.polymorphic13a.2
 pp.polymorphic13a.3<-corHMM(mytree,trait13[,c(1,2,3)],rate.cat=1,model = "SYM", node.states="marginal")
 pp.polymorphic13a.3
+
+pp.polymorphic13a.4<-corHMM(mytree,trait13[,c(1,2,3)],rate.cat=3,node.states="marginal")
+pp.polymorphic13a.4
+
 
 pp.polymorphic13b<-corHMM(mytree,trait13[,c(1,2,4)],rate.cat=2,node.states="marginal")
 pp.polymorphic13b
