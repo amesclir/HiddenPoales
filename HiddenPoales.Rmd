@@ -65,35 +65,74 @@ pp.polymorphic12a.3
 pp.polymorphic12a.4<-corHMM(mytree,trait12[,c(1,2,3)],rate.cat=3, node.states="marginal")
 pp.polymorphic12a.4
 
-LegendAndRateMat <- getStateMat4Dat(trait12[,c(1,2,4)])
-LegendAndRateMat
-RateMat <- LegendAndRateMat$rate.mat
-RateMat
-RateMat[2,3] <- 0
-RateMat[3,2] <- 0
-RateMat[5,6] <- 0
-RateMat[6,5] <- 0
-RateMat[5,2] <- 5
-RateMat[1,3] <- 6
-RateMat[6,3] <- 7
-RateMat[1,4] <- 8
-RateMat[5,4] <- 9
-RateMat[6,4] <- 10
-RateMat[2,5] <- 11
-RateMat[4,5] <- 12
-RateMat[2,5] <- 11
-RateMat[4,5] <- 12
-RateMat[3,6] <- 13
-RateMat[4,6] <- 14
-RateMat
-RateClassMat <- getRateCatMat(2) #
-RateClassMat <- equateStateMatPars(RateClassMat, c(1,2))
+pp.polymorphic12a.5<-corHMM(mytree,trait12[,c(1,2,3)],rate.cat=3, model = "SYM", node.states="marginal")
+pp.polymorphic12a.5
+
+LegendAndRate.ind <- getStateMat4Dat(trait12[,c(1,2,3)]) 
+LegendAndRate.ind
+Rate.ind <- LegendAndRate.ind$rate.mat
+Rate.ind
+Rate.ind <- equateStateMatPars(Rate.ind, c(1,6))
+Rate.ind
+Rate.ind <- equateStateMatPars(Rate.ind, c(1,3))
+Rate.ind
+Rate.ind <- equateStateMatPars(Rate.ind, c(1,4))
+Rate.ind
+Rate.ind <- equateStateMatPars(Rate.ind, c(1,2))
+Rate.ind
+RateClassMat <- getRateCatMat(3)
 RateClassMat
-StateMats <- list(RateMat, RateMat)
+StateMats <- list(Rate.ind, Rate.ind, Rate.ind)
 StateMats
-FullMat <- getFullMat(StateMats, RateClassMat)
-FullMat
-RateMatsym <- RateMat
+IND3 <- getFullMat(StateMats, RateClassMat)
+IND3
+
+Rate.indsym <- Rate.ind
+Rate.indsym
+Rate.indsym <- equateStateMatPars(Rate.indsym, c(2,4))
+Rate.indsym
+Rate.indsym <- equateStateMatPars(Rate.indsym, c(1,2))
+Rate.indsym
+StateMats <- list(Rate.indsym, Rate.indsym, Rate.indsym)
+StateMats
+IND3sym <- getFullMat(StateMats, RateClassMat)
+IND3sym
+
+pp.polymorphic12a.6<-corHMM(mytree,trait12[,c(1,2,3)],rate.cat=3, rate.mat = IND3, node.states="marginal")
+pp.polymorphic12a.6
+
+pp.polymorphic12a.7<-corHMM(mytree,trait12[,c(1,2,3)],rate.cat=3, rate.mat = IND3sym, node.states="marginal")
+pp.polymorphic12a.7
+
+#LegendAndRateMat <- getStateMat4Dat(trait12[,c(1,2,4)])
+#LegendAndRateMat
+#RateMat <- LegendAndRateMat$rate.mat
+#RateMat
+#RateMat[2,3] <- 0
+#RateMat[3,2] <- 0
+#RateMat[5,6] <- 0
+#RateMat[6,5] <- 0
+#RateMat[5,2] <- 5
+#RateMat[1,3] <- 6
+#RateMat[6,3] <- 7
+#RateMat[1,4] <- 8
+#RateMat[5,4] <- 9
+#RateMat[6,4] <- 10
+#RateMat[2,5] <- 11
+#RateMat[4,5] <- 12
+#RateMat[2,5] <- 11
+#RateMat[4,5] <- 12
+#RateMat[3,6] <- 13
+#RateMat[4,6] <- 14
+#RateMat
+#RateClassMat <- getRateCatMat(2) #
+#RateClassMat <- equateStateMatPars(RateClassMat, c(1,2))
+#RateClassMat
+#StateMats <- list(RateMat, RateMat)
+#StateMats
+#FullMat <- getFullMat(StateMats, RateClassMat)
+#FullMat
+#RateMatsym <- RateMat
 RateMatsym
 RateMatsym[5,4] <- 1
 RateMatsym[6,4] <- 2
@@ -107,8 +146,8 @@ StateMatssym <- list(RateMatsym, RateMatsym)
 StateMatssym
 FullMatsym <- getFullMat(StateMatssym, RateClassMat)
 FullMatsym
-pp.polymorphic12b<-corHMM(mytree,trait12[,c(1,2,4)],rate.cat=2,rate.mat = FullMat, node.states="marginal")
-pp.polymorphic12b
+#pp.polymorphic12b<-corHMM(mytree,trait12[,c(1,2,4)],rate.cat=2,rate.mat = FullMat, node.states="marginal")
+#pp.polymorphic12b
 pp.polymorphic12b.1<-corHMM(mytree,trait12[,c(1,2,4)],rate.cat=1,rate.mat = RateMat, node.states="marginal")
 pp.polymorphic12b.1
 pp.polymorphic12b.2<-corHMM(mytree,trait12[,c(1,2,4)],rate.cat=2, rate.mat = FullMatsym, node.states="marginal")
@@ -116,17 +155,17 @@ pp.polymorphic12b.2
 pp.polymorphic12b.3<-corHMM(mytree,trait12[,c(1,2,4)],rate.cat=1,rate.mat = RateMatsym, node.states="marginal")
 pp.polymorphic12b.3
 
-RateMat
-RateClassMat3 <- getRateCatMat(3) #
-RateClassMat3 <- equateStateMatPars(RateClassMat3, c(1,2,3,4,5,6))
-RateClassMat3
-StateMats3 <- list(RateMat, RateMat,RateMat)
-StateMats3
-FullMat3 <- getFullMat(StateMats3, RateClassMat3)
-FullMat3
+#RateMat
+#RateClassMat3 <- getRateCatMat(3) #
+#RateClassMat3 <- equateStateMatPars(RateClassMat3, c(1,2,3,4,5,6))
+#RateClassMat3
+#StateMats3 <- list(RateMat, RateMat,RateMat)
+#StateMats3
+#FullMat3 <- getFullMat(StateMats3, RateClassMat3)
+#FullMat3
 
-pp.polymorphic12b.4<-corHMM(mytree,trait12[,c(1,2,4)],rate.cat=3,rate.mat = FullMat3, node.states="marginal")
-pp.polymorphic12b.4
+#pp.polymorphic12b.4<-corHMM(mytree,trait12[,c(1,2,4)],rate.cat=3,rate.mat = FullMat3, node.states="marginal")
+#pp.polymorphic12b.4
 
 RateMat
 RateClassMat2 <- getRateCatMat(2) #
@@ -151,6 +190,61 @@ FullMat3b
 pp.polymorphic12b.6<-corHMM(mytree,trait12[,c(1,2,4)],rate.cat=3,rate.mat = FullMat3b, node.states="marginal")
 pp.polymorphic12b.6
 
+
+RateMat.ind <- RateMat
+RateMat.ind
+RateMat.ind <- equateStateMatPars(RateMat.ind, c(1,9))
+RateMat.ind
+RateMat.ind <- equateStateMatPars(RateMat.ind, c(1,8))
+RateMat.ind
+RateMat.ind <- equateStateMatPars(RateMat.ind, c(1,3,5))
+RateMat.ind
+RateMat.ind <- equateStateMatPars(RateMat.ind, c(1,5))
+RateMat.ind
+RateMat.ind <- equateStateMatPars(RateMat.ind, c(1,5))
+RateMat.ind
+RateMat.ind <- equateStateMatPars(RateMat.ind, c(1,2,3))
+RateMat.ind
+
+RateClassMat <- getRateCatMat(3)
+RateClassMat
+StateMats3.ind <- list(RateMat.ind, RateMat.ind, RateMat.ind)
+StateMats3.ind
+FullMat3.ind <- getFullMat(StateMats3.ind, RateClassMat)
+FullMat3.ind
+
+RateMat.indsym <- RateMat.ind
+RateMat.indsym
+RateMat.indsym <- equateStateMatPars(RateMat.indsym, c(1,4))
+RateMat.indsym
+RateMat.indsym <- equateStateMatPars(RateMat.indsym, c(1,3))
+RateMat.indsym
+RateMat.indsym <- equateStateMatPars(RateMat.indsym, c(1,2))
+RateMat.indsym
+RateClassMat <- getRateCatMat(3)
+RateClassMat
+StateMats3.indsym <- list(RateMat.indsym, RateMat.indsym, RateMat.indsym)
+StateMats3.indsym
+FullMat3.indsym <- getFullMat(StateMats3.indsym, RateClassMat)
+FullMat3.indsym
+
+pp.polymorphic12b.7<-corHMM(mytree,trait12[,c(1,2,4)],rate.cat=3,rate.mat = FullMat3.ind, node.states="marginal")
+pp.polymorphic12b.7
+
+pp.polymorphic12b.8<-corHMM(mytree,trait12[,c(1,2,4)],rate.cat=3,rate.mat = FullMat3.indsym, node.states="marginal")
+pp.polymorphic12b.8
+
+RateMatsym
+StateMatssym3 <- list(RateMatsym, RateMatsym, RateMatsym)
+StateMatssym3
+FullMatsym3 <- getFullMat(StateMatssym3, RateClassMat)
+FullMatsym3
+pp.polymorphic12b.9<-corHMM(mytree,trait12[,c(1,2,4)],rate.cat=3,rate.mat = FullMatsym3, node.states="marginal")
+pp.polymorphic12b.9
+
+#####################
+#INDIVIDUAL ANALYSES
+#open close
 pp.polymorphic12c<-corHMM(mytree,trait12[,c(1,2)],rate.cat=2,node.states="marginal")
 pp.polymorphic12c
 pp.polymorphic12c.1<-corHMM(mytree,trait12[,c(1,2)],rate.cat=1,node.states="marginal")
@@ -159,7 +253,12 @@ pp.polymorphic12c.2<-corHMM(mytree,trait12[,c(1,2)],rate.cat=2, model = "SYM", n
 pp.polymorphic12c.2
 pp.polymorphic12c.3<-corHMM(mytree,trait12[,c(1,2)],rate.cat=1,model = "SYM", node.states="marginal")
 pp.polymorphic12c.3
+pp.polymorphic12c.4<-corHMM(mytree,trait12[,c(1,2)],rate.cat=3,node.states="marginal")
+pp.polymorphic12c.4
+pp.polymorphic12c.5<-corHMM(mytree,trait12[,c(1,2)],rate.cat=3,model = "SYM", node.states="marginal")
+pp.polymorphic12c.5
 
+#annual perennial
 pp.polymorphic12d<-corHMM(mytree,trait12[,c(1,3)],rate.cat=2,node.states="marginal")
 pp.polymorphic12d
 pp.polymorphic12d.1<-corHMM(mytree,trait12[,c(1,3)],rate.cat=1,node.states="marginal")
@@ -168,7 +267,12 @@ pp.polymorphic12d.2<-corHMM(mytree,trait12[,c(1,3)],rate.cat=2, model = "SYM", n
 pp.polymorphic12d.2
 pp.polymorphic12d.3<-corHMM(mytree,trait12[,c(1,3)],rate.cat=1,model = "SYM", node.states="marginal")
 pp.polymorphic12d.3
+pp.polymorphic12d.4<-corHMM(mytree,trait12[,c(1,3)],rate.cat=3,node.states="marginal")
+pp.polymorphic12d.4
+pp.polymorphic12d.5<-corHMM(mytree,trait12[,c(1,3)],rate.cat=3,model = "SYM",node.states="marginal")
+pp.polymorphic12d.5
 
+#open_close_C3C4CAM
 LegendAndRateMat <- getStateMat4Dat(trait12[,c(1,4)])
 RateMat <- LegendAndRateMat$rate.mat
 RateMat
@@ -199,6 +303,7 @@ pp.polymorphic12e.2<-corHMM(mytree,trait12[,c(1,4)],rate.cat=2, rate.mat = FullM
 pp.polymorphic12e.2
 pp.polymorphic12e.3<-corHMM(mytree,trait12[,c(1,4)],rate.cat=1, rate.mat = RateMatsym, node.states="marginal")
 pp.polymorphic12e.3
+#####################################
 
 #open_close_C3C4CAM
 pdffn = paste0("corHMMmodel_open_close_C3C4CAM.pdf")
@@ -757,6 +862,7 @@ mytree <- drop.tip(mytree, tipstoremove)
 setdiff(trait13[,1], mytree$tip.label)
 setdiff(mytree$tip.label,trait13[,1])
 
+#wind animal
 pp.polymorphic13a<-corHMM(mytree,trait13[,c(1,2,3)],rate.cat=2,node.states="marginal")
 pp.polymorphic13a
 pp.polymorphic13a.1<-corHMM(mytree,trait13[,c(1,2,3)],rate.cat=1,node.states="marginal")
@@ -769,7 +875,16 @@ pp.polymorphic13a.3
 pp.polymorphic13a.4<-corHMM(mytree,trait13[,c(1,2,3)],rate.cat=3,node.states="marginal")
 pp.polymorphic13a.4
 
+pp.polymorphic13a.5<-corHMM(mytree,trait13[,c(1,2,3)],rate.cat=3,model = "SYM", node.states="marginal")
+pp.polymorphic13a.5
 
+pp.polymorphic13a.6<-corHMM(mytree,trait13[,c(1,2,3)],rate.cat=3, rate.mat = IND3, node.states="marginal")
+pp.polymorphic13a.6
+
+pp.polymorphic13a.7<-corHMM(mytree,trait13[,c(1,2,3)],rate.cat=3, rate.mat = IND3sym, node.states="marginal")
+pp.polymorphic13a.7
+
+#silica
 pp.polymorphic13b<-corHMM(mytree,trait13[,c(1,2,4)],rate.cat=2,node.states="marginal")
 pp.polymorphic13b
 pp.polymorphic13b.1<-corHMM(mytree,trait13[,c(1,2,4)],rate.cat=1,node.states="marginal")
@@ -782,7 +897,16 @@ pp.polymorphic13b.3
 pp.polymorphic13b.4<-corHMM(mytree,trait13[,c(1,2,4)],rate.cat=3,node.states="marginal")
 pp.polymorphic13b.4
 
+pp.polymorphic13b.5<-corHMM(mytree,trait13[,c(1,2,4)],rate.cat=3,model="SYM", node.states="marginal")
+pp.polymorphic13b.5
 
+pp.polymorphic13b.6<-corHMM(mytree,trait13[,c(1,2,4)],rate.cat=3, rate.mat = IND3, node.states="marginal")
+pp.polymorphic13b.6
+
+pp.polymorphic13b.7<-corHMM(mytree,trait13[,c(1,2,4)],rate.cat=3, rate.mat = IND3sym, node.states="marginal")
+pp.polymorphic13b.7
+
+#wet
 pp.polymorphic13c<-corHMM(mytree,trait13[,c(1,2,5)],rate.cat=2,node.states="marginal")
 pp.polymorphic13c
 pp.polymorphic13c.1<-corHMM(mytree,trait13[,c(1,2,5)],rate.cat=1,node.states="marginal")
@@ -795,7 +919,16 @@ pp.polymorphic13c.3
 pp.polymorphic13c.4<-corHMM(mytree,trait13[,c(1,2,5)],rate.cat=3,node.states="marginal")
 pp.polymorphic13c.4
 
+pp.polymorphic13c.5<-corHMM(mytree,trait13[,c(1,2,5)],rate.cat=3,model="SYM", node.states="marginal")
+pp.polymorphic13c.5
 
+pp.polymorphic13c.6<-corHMM(mytree,trait13[,c(1,2,5)],rate.cat=3, rate.mat = IND3, node.states="marginal")
+pp.polymorphic13c.6
+
+pp.polymorphic13c.7<-corHMM(mytree,trait13[,c(1,2,5)],rate.cat=3, rate.mat = IND3sym, node.states="marginal")
+pp.polymorphic13c.7
+
+#epiphyte
 pp.polymorphic13d<-corHMM(mytree,trait13[,c(1,2,6)],rate.cat=2,node.states="marginal")
 pp.polymorphic13d
 pp.polymorphic13d.1<-corHMM(mytree,trait13[,c(1,2,6)],rate.cat=1,node.states="marginal")
@@ -808,12 +941,50 @@ pp.polymorphic13d.3
 pp.polymorphic13d.4<-corHMM(mytree,trait13[,c(1,2,6)],rate.cat=3,node.states="marginal")
 pp.polymorphic13d.4
 
+pp.polymorphic13d.5<-corHMM(mytree,trait13[,c(1,2,6)],rate.cat=3,model="SYM",node.states="marginal")
+pp.polymorphic13d.5
 
+pp.polymorphic13d.6<-corHMM(mytree,trait13[,c(1,2,6)],rate.cat=3, rate.mat = IND3, node.states="marginal")
+pp.polymorphic13d.6
+
+pp.polymorphic13d.7<-corHMM(mytree,trait13[,c(1,2,6)],rate.cat=3, rate.mat = IND3sym, node.states="marginal")
+pp.polymorphic13d.7
+
+######################
+#INDIVIDUAL ANALYSES
+#open close
+pp.polymorphic13f<-corHMM(mytree,trait13[,c(1,2)],rate.cat=2,node.states="marginal")
+pp.polymorphic13f
+pp.polymorphic13f.1<-corHMM(mytree,trait13[,c(1,2)],rate.cat=1,node.states="marginal")
+pp.polymorphic13f.1
+pp.polymorphic13f.2<-corHMM(mytree,trait13[,c(1,2)],rate.cat=2, model = "SYM", node.states="marginal")
+pp.polymorphic13f.2
+pp.polymorphic13f.3<-corHMM(mytree,trait13[,c(1,2)],rate.cat=1,model = "SYM", node.states="marginal")
+pp.polymorphic13f.3
+pp.polymorphic13f.4<-corHMM(mytree,trait13[,c(1,2)],rate.cat=3,node.states="marginal")
+pp.polymorphic13f.4
+pp.polymorphic13f.5<-corHMM(mytree,trait13[,c(1,2)],rate.cat=3,model = "SYM", node.states="marginal")
+pp.polymorphic13f.5
+
+#wind animal
+pp.polymorphic13g<-corHMM(mytree,trait13[,c(1,3)],rate.cat=2,node.states="marginal")
+pp.polymorphic13g
+pp.polymorphic13g.1<-corHMM(mytree,trait13[,c(1,3)],rate.cat=1,node.states="marginal")
+pp.polymorphic13g.1
+pp.polymorphic13g.2<-corHMM(mytree,trait13[,c(1,3)],rate.cat=2, model = "SYM", node.states="marginal")
+pp.polymorphic13g.2
+pp.polymorphic13g.3<-corHMM(mytree,trait13[,c(1,3)],rate.cat=1,model = "SYM", node.states="marginal")
+pp.polymorphic13g.3
+pp.polymorphic13g.4<-corHMM(mytree,trait13[,c(1,3)],rate.cat=3,node.states="marginal")
+pp.polymorphic13g.4
+pp.polymorphic13g.5<-corHMM(mytree,trait13[,c(1,3)],rate.cat=3,model = "SYM", node.states="marginal")
+pp.polymorphic13g.5
+##########################################
 
 #open_close_wind_animal
 pdffn = paste0("corHMMmodel_open_close_wind_animal.pdf")
 pdf(file=pdffn, width=8, height=8)
-plotMKmodel(pp.polymorphic13a.4, rate.cat = 3, color = "col.blind" )
+plotMKmodel(pp.polymorphic13a.5, rate.cat = 3, color = "col.blind" )
 dev.off()
 
 trait <- paste(trait13[,2],trait13[,3], sep = "_") 
@@ -836,7 +1007,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13a.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13a.5$states,piecol=cols,cex=0.1)
 add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
 dev.off()
@@ -847,7 +1018,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13a.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13a.5$states,piecol=cols,cex=0.1)
 dev.off()
 
 #1     2     3     4 
@@ -861,7 +1032,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13a.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13a.5$states,piecol=cols,cex=0.1)
 add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
 dev.off()
@@ -872,7 +1043,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13a.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13a.5$states,piecol=cols,cex=0.1)
 dev.off()
 
 cols <- c("pink", "pink", "brown", "brown", "pink", "pink", "brown", "brown","pink", "pink", "brown", "brown")
@@ -882,7 +1053,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13a.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13a.5$states,piecol=cols,cex=0.1)
 add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
 dev.off()
@@ -893,7 +1064,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13a.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13a.5$states,piecol=cols,cex=0.1)
 dev.off()
 
 
@@ -904,7 +1075,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13a.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13a.5$states,piecol=cols,cex=0.1)
 add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
 dev.off()
@@ -915,7 +1086,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13a.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13a.5$states,piecol=cols,cex=0.1)
 dev.off()
 
 
@@ -925,7 +1096,7 @@ dev.off()
 #open_close_silica
 pdffn = paste0("corHMMmodel_open_close_silica.pdf")
 pdf(file=pdffn, width=8, height=8)
-plotMKmodel(pp.polymorphic13b.4, rate.cat = 3, color = "col.blind" )
+plotMKmodel(pp.polymorphic13b.6, rate.cat = 3, color = "col.blind" )
 dev.off()
 
 #"0_0" "0_1" "1_0" "1_1" 
@@ -949,7 +1120,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13b.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13b.6$states,piecol=cols,cex=0.1)
 add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
 dev.off()
@@ -960,7 +1131,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13b.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13b.6$states,piecol=cols,cex=0.1)
 dev.off()
 
 #1     2     3     4 
@@ -974,7 +1145,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13b.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13b.6$states,piecol=cols,cex=0.1)
 add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
 dev.off()
@@ -985,7 +1156,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13b.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13b.6$states,piecol=cols,cex=0.1)
 dev.off()
 
 cols <- c("pink", "pink", "brown", "brown", "pink", "pink", "brown", "brown", "pink", "pink", "brown", "brown")
@@ -995,7 +1166,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13b.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13b.6$states,piecol=cols,cex=0.1)
 add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
 dev.off()
@@ -1006,7 +1177,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13b.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13b.6$states,piecol=cols,cex=0.1)
 dev.off()
 
 
@@ -1017,7 +1188,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13b.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13b.6$states,piecol=cols,cex=0.1)
 add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
 dev.off()
@@ -1028,7 +1199,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13b.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13b.6$states,piecol=cols,cex=0.1)
 dev.off()
 
 
@@ -1036,7 +1207,7 @@ dev.off()
 #open_close_wet_dry
 pdffn = paste0("corHMMmodel_open_close_wet_dry.pdf")
 pdf(file=pdffn, width=8, height=8)
-plotMKmodel(pp.polymorphic13c.4, rate.cat = 3, color = "col.blind" )
+plotMKmodel(pp.polymorphic13c.6, rate.cat = 3, color = "col.blind" )
 dev.off()
 
 #"0_0" "0_1" "1_0" "1_1" 
@@ -1059,7 +1230,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13c.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13c.6$states,piecol=cols,cex=0.1)
 add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
 dev.off()
@@ -1070,7 +1241,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13c.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13c.6$states,piecol=cols,cex=0.1)
 dev.off()
 
 #1     2     3     4 
@@ -1084,7 +1255,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13c.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13c.6$states,piecol=cols,cex=0.1)
 add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
 dev.off()
@@ -1095,7 +1266,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13c.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13c.6$states,piecol=cols,cex=0.1)
 dev.off()
 
 cols <- c("pink", "pink", "brown", "brown", "pink", "pink", "brown", "brown", "pink", "pink", "brown", "brown")
@@ -1105,7 +1276,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13c.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13c.6$states,piecol=cols,cex=0.1)
 add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
 dev.off()
@@ -1116,7 +1287,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13c.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13c.6$states,piecol=cols,cex=0.1)
 dev.off()
 
 
@@ -1127,7 +1298,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13c.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13c.6$states,piecol=cols,cex=0.1)
 add.simmap.legend(colors=cols,prompt=FALSE,x=0.9*par()$usr[1],
     y=0.8*par()$usr[3],fsize=2)
 dev.off()
@@ -1138,7 +1309,7 @@ plot(mytree,type="fan", show.tip.label = F,cex=1,font=3,lwd=0.5,label.offset = 1
 tiplabels(pie=to.matrix(trait[mytree$tip.label],
     levels(as.factor(trait))),piecol=cols,cex=0.1)
 nodelabels(node=1:mytree$Nnode+Ntip(mytree),
-    pie=pp.polymorphic13c.4$states,piecol=cols,cex=0.1)
+    pie=pp.polymorphic13c.6$states,piecol=cols,cex=0.1)
 dev.off()
 
 
